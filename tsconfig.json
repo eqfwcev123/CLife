@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
     "lib": ["es5", "es6"],
-    "target": "ES6",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "baseUrl": "./src",
-    "pretty": true,
-    "typeRoots": ["node_moudles/@types"]
+    "outDir": "./build"
   }
 }
