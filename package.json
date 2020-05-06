@@ -41,6 +41,7 @@
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.3",
     "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
     "passport-local": "^1.0.0",
     "pug": "2.0.0-beta11",
     "reflect-metadata": "^0.1.10",
