@@ -50,6 +50,6 @@ export class User {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
-  @OneToMany((type) => Post, (post) => post.user)
+  @OneToMany((type) => Post, (post) => post.user, { nullable: true })
   posts: Post[];
 }
