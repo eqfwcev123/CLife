@@ -1,4 +1,4 @@
-import { getConnection, getRepository } from "typeorm";
+import { getRepository } from "typeorm";
 import * as passport from "passport";
 import { Strategy } from "passport-local";
 import * as bcrypt from "bcrypt";
@@ -6,8 +6,8 @@ import { User } from "../entity/User";
 
 // passport.use(name, strategy)
 export default () => {
+  console.log("localStrategy Called");
   passport.use(
-    "local",
     new Strategy(
       {
         usernameField: "user_id",
@@ -15,7 +15,7 @@ export default () => {
       },
       async (username, password, done) => {
         try {
-          let userRepository = await getConnection().getRepository(User);
+          let userRepository = await getRepository(User);
           let user = await userRepository.findOne({
             username: username,
           });
