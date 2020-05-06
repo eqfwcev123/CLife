@@ -1,4 +1,4 @@
-import { createConnection } from "typeorm";
+import { createConnection, getManager } from "typeorm";
 import * as express from "express";
 import * as morgan from "morgan";
 import * as cookieParser from "cookie-parser";
@@ -6,17 +6,19 @@ import * as expressSession from "express-session";
 import * as dotenv from "dotenv";
 import * as hpp from "hpp";
 import * as helmet from "helmet";
+import * as passport from "passport";
 import "reflect-metadata";
 
 //Router
+console.log("라우터 연결전 ");
 import userRouter from "./router/index";
+import { Post } from "./entity/Post";
 
 dotenv.config();
 const app = express();
 const prod = process.env.NODE_ENV === "production";
 app.set("port", prod ? process.env.PORT : 3065);
 
-// createConnection()함수에 아무것도 지정하지 않으면 ormcofig.json 파일을 찾는다.
 createConnection()
   .then(async (connection) => {
     if (prod) {
@@ -42,15 +44,13 @@ createConnection()
         },
       })
     );
-
-    app.get("/", (req, res, next) => {
-      res.send("코로나 짤 프로젝트 정상 동작중!!!!");
-    });
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     app.use("/user", userRouter);
-
-    app.listen(app.get("port"), () => {
-      console.log(`server listening at port ${app.get("port")}`);
-    });
   })
   .catch((error) => console.log(error));
+
+app.listen(app.get("port"), () => {
+  console.log(`server listening at port ${app.get("port")}`);
+});
