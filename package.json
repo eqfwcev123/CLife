@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "tsnd --respawn src/index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "sync": "npm run typeorm schema:sync"
+    "sync": "npm run typeorm schema:sync",
+    "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
     "@types/aws-sdk": "^2.7.0",
@@ -50,6 +52,7 @@
   "devDependencies": {
     "@types/node": "^8.0.29",
     "ts-node": "3.3.0",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "3.3.3333"
   }
 }
