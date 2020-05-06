@@ -24,13 +24,7 @@ export class Post {
     type: "text",
     nullable: true,
   })
-  information: string;
-
-  @Column({
-    type: "boolean",
-    nullable: true,
-  })
-  isImportant: boolean;
+  content: string;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
