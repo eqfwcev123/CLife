@@ -11,11 +11,11 @@ router.get("/", (req, res, next) => {
   console.log(getConnection());
 });
 
-router.get("/login", isLoggedOut, (req, res, next) => {
-  res.send("로그인");
+router.post("/login", isLoggedOut, (req, res, next) => {
   passport.authenticate(
     "local",
     (err: Error, user: User, info: { message: string }) => {
+      console.log(req.user);
       if (err) {
         console.error(err);
         return next(err);
