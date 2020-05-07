@@ -7,6 +7,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "outDir": "./build",
-    "watch": true
-  }
+    "watch": true,
+    "typeRoots": ["./tyopes", "./node_modules/@types"]
+  },
+  "exclude": ["node_modules", "types"]
 }
