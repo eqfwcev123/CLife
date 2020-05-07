@@ -69,4 +69,25 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
   }
 });
 
+router.get("/auth/facebook", isLoggedOut, (req, res, next) => {
+  passport.authenticate("facebook", {
+    scope: ["public_profile", "email"],
+  });
+});
+
+router.get(
+  "/auth/facebook/callback",
+  isLoggedOut,
+  passport.authenticate(
+    "facebook",
+    {
+      failureRedirect: "/user",
+    },
+    (req, res, next) => {
+      // TODOS: 페이스북 로그인 성공시 메인페이지로 이동
+      res.redirect("/main");
+    }
+  )
+);
+
 export default router;
