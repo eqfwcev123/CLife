@@ -27,7 +27,6 @@ export default () => {
           name: profile.displayName,
           email: profile.emails[0].value,
           username: profile.id,
-          password: 
         });
         done(null, newUser);
       }
