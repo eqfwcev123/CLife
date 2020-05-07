@@ -2,6 +2,7 @@ import { getRepository } from "typeorm";
 import * as passport from "passport";
 import { User } from "../entity/User";
 import local from "./local";
+import facebook from "./faceobook";
 
 export default () => {
   passport.serializeUser((user: User, done) => {
@@ -23,4 +24,5 @@ export default () => {
     }
   });
   local();
+  facebook();
 };
