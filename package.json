@@ -7,7 +7,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "sync": "npm run typeorm schema:sync",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
+    "revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
+    "test": "mocha"
   },
   "dependencies": {
     "@types/aws-sdk": "^2.7.0",
@@ -22,9 +23,11 @@
     "@types/multer": "^1.4.3",
     "@types/multer-s3": "^2.7.7",
     "@types/passport": "^1.0.3",
+    "@types/passport-facebook": "^2.1.9",
     "@types/passport-local": "^1.0.33",
     "aws-sdk": "^2.668.0",
     "bcrypt": "^4.0.1",
+    "chai": "^4.2.0",
     "clean-css": "^4.1.11",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -32,9 +35,11 @@
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "express-session": "^1.17.1",
+    "g": "^2.0.1",
     "helmet": "^3.22.0",
     "hpp": "^0.2.3",
     "http-errors": "~1.6.3",
+    "mocha": "^7.1.2",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
