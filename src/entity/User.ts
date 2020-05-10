@@ -7,8 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  JoinTable,
 } from "typeorm";
 import { Post } from "./Post";
+import { Comment } from "./Comment";
+import { type } from "os";
 
 @Entity()
 export class User {
@@ -52,4 +55,15 @@ export class User {
 
   @OneToMany((type) => Post, (post) => post.user, { nullable: true })
   posts: Post[];
+
+  @OneToMany((type) => Comment, (comment) => comment.user, { nullable: true })
+  comments: Comment[];
+
+  @ManyToMany((type) => User)
+  @JoinTable({
+    name: "user_follower_following",
+    joinColumn: { name: "follower" },
+    inverseJoinColumn: { name: "following" },
+  })
+  users: User[];
 }

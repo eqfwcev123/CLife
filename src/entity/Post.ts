@@ -5,8 +5,11 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { User } from "./User";
+import { HashTag } from "./HashTag";
 
 @Entity()
 export class Post {
@@ -37,4 +40,8 @@ export class Post {
     onDelete: "CASCADE",
   })
   user: User;
+
+  @ManyToMany((type) => HashTag)
+  @JoinTable()
+  hashtags: HashTag[];
 }
