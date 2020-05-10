@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { type } from "os";
 import { User } from "./User";
+import { Post } from "./Post";
 
 @Entity()
 export class Comment {
@@ -22,9 +23,14 @@ export class Comment {
   @CreateDateColumn()
   created_date: Date;
 
-  @ManyToOne((type) => User, (user) => Comment.user, {
+  // Many Comment to One User
+  @ManyToOne((type) => User, (user) => user.comments, {
     nullable: true,
     onDelete: "CASCADE",
   })
   user: User;
+
+  // Many Comment to One Post
+  @ManyToOne((type) => Post, (post) => post.id)
+  post: Post;
 }
