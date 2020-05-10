@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, Entity, Column } from "typeorm";
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne } from "typeorm";
+import { Post } from "./Post";
 
 @Entity()
 export class Image {
@@ -10,4 +11,8 @@ export class Image {
     length: 50,
   })
   src: string;
+
+  // Many image To One post
+  @ManyToOne((type) => Post, (post) => post.image)
+  post: Post;
 }
