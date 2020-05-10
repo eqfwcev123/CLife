@@ -18,6 +18,7 @@ dotenv.config();
 const app = express();
 const prod = process.env.NODE_ENV === "production";
 app.set("port", prod ? process.env.PORT : 3065);
+app.set("view engine", "pug");
 
 createConnection()
   .then(async (connection) => {
