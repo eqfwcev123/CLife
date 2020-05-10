@@ -1,15 +1,10 @@
-import { getRepository, getConnection } from "typeorm";
+import { getRepository } from "typeorm";
 import { isLoggedIn, isLoggedOut } from "./middleware";
 import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as passport from "passport";
 import { User } from "../entity/User";
 const router = express.Router();
-
-router.get("/", (req, res, next) => {
-  res.send("사용자 정보 페이지!!!");
-  console.log(getConnection());
-});
 
 router.post("/login", isLoggedOut, (req, res, next) => {
   passport.authenticate(
@@ -78,16 +73,17 @@ router.get("/auth/facebook", isLoggedOut, (req, res, next) => {
 router.get(
   "/auth/facebook/callback",
   isLoggedOut,
-  passport.authenticate(
-    "facebook",
-    {
-      failureRedirect: "/user",
-    },
-    (req, res, next) => {
-      // TODOS: 페이스북 로그인 성공시 메인페이지로 이동
-      res.redirect("/main");
-    }
-  )
+  passport.authenticate("facebook", {
+    failureRedirect: "/user",
+    //TODOS: 페이스북 로그인 성공시 /main으로 redirect
+    successRedirect: "/main",
+  })
 );
+
+router.get("/list", async (req, res, next) => {
+  const userRepository = getRepository(User);
+  const users = await userRepository.createQueryBuilder("users").getMany();
+  return res.json(users);
+});
 
 export default router;
