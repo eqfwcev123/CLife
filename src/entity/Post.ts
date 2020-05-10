@@ -1,3 +1,4 @@
+import { type } from "os";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,9 +8,12 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
 import { HashTag } from "./HashTag";
+import { Comment } from "./Comment";
+import { Image } from "./Image";
 
 @Entity()
 export class Post {
@@ -35,13 +39,36 @@ export class Post {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
+  // Many post To One User
   @ManyToOne((type) => User, (user) => user.posts, {
     nullable: false,
     onDelete: "CASCADE",
   })
   user: User;
 
+  // One post To Many Comment
+  @OneToMany((type) => Comment, (comment) => comment.content)
+  comment: Comment;
+
+  // One post To Many Image
+  @OneToMany((type) => Image, (image) => image.post)
+  image: Image[];
+
+  // Many post To Many HashTags
   @ManyToMany((type) => HashTag)
-  @JoinTable()
+  @JoinTable({
+    name: "post_hashtag_hashtagger",
+    joinColumn: { name: "tag" },
+    inverseJoinColumn: { name: "tagger" },
+  })
   hashtags: HashTag[];
+
+  // Many post To Many user(like)
+  @ManyToMany((type) => User)
+  @JoinTable({
+    name: "post_like_likeuser",
+    joinColumn: { name: "like" },
+    inverseJoinColumn: { name: "liker" },
+  })
+  post: Post[];
 }
