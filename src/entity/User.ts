@@ -53,12 +53,15 @@ export class User {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt: Date;
 
+  // One user to Many Post
   @OneToMany((type) => Post, (post) => post.user, { nullable: true })
   posts: Post[];
 
+  // One user to Many Comment
   @OneToMany((type) => Comment, (comment) => comment.user, { nullable: true })
   comments: Comment[];
 
+  // Many user to Many user
   @ManyToMany((type) => User)
   @JoinTable({
     name: "user_follower_following",
