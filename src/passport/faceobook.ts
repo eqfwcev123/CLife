@@ -12,9 +12,10 @@ export default () => {
       {
         clientID: process.env.FACEBOOKE_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: "",
+        callbackURL: "http://localhost:3065/user/auth/facebook/callback",
+        passReqToCallback: true,
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (req, accessToken, refreshToken, profile, done) => {
         const userRepository = getRepository(User);
         const user = await userRepository.findOne({
           where: { email: profile.emails[0] },
@@ -23,11 +24,10 @@ export default () => {
         if (user) {
           done(null, user);
         }
-        const newUser = userRepository.create({
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          username: profile.id,
+        let newUser = userRepository.create({
+          id: parseInt(profile.id),
         });
+        newUser = await userRepository.save(newUser);
         done(null, newUser);
       }
     )
