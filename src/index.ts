@@ -7,6 +7,7 @@ import * as dotenv from "dotenv";
 import * as hpp from "hpp";
 import * as helmet from "helmet";
 import * as passport from "passport";
+import * as cors from "cors";
 import "reflect-metadata";
 
 //Router
@@ -45,6 +46,7 @@ createConnection()
         },
       })
     );
+    app.use(cors());
     app.use(passport.initialize());
     app.use(passport.session());
 
