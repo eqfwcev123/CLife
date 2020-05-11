@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from "typeorm";
-import { type } from "os";
 import { User } from "./User";
 import { Post } from "./Post";
 
