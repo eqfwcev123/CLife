@@ -2,33 +2,37 @@ import { getRepository } from "typeorm";
 import * as passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 import * as dotenv from "dotenv";
-import { User } from "../entity/User";
+import * as bcrypt from "bcrypt";
+import { GoogleUser } from "../entity/GoogleUser";
 dotenv.config();
 
 export default () => {
   passport.use(
     new Strategy(
       {
-        clientID: process.env.GOOGLE_APP_ID,
-        clientSecret: process.env.GOOGLE_APP_SECRET,
-        callbackURL: "http://localhost:3065/auth/google/callback",
-        passReqToCallback: true,
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:8000/user/auth/google/callback",
+        scope: ["id", "displayName", "email"],
       },
-      async (request, accessToken, refreshToken, profile, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         try {
-          const userRepository = getRepository(User);
+          const userRepository = getRepository(GoogleUser);
           const user = await userRepository.findOne({
-            where: { email: profile.emails[0] },
+            where: { email: profile.emails[0].value },
           });
-          // user 가 존재할 경우
+          console.log(user);
           if (user) {
             done(null, user);
+          } else {
+            let newpassword = await bcrypt.hash(profile.id, 12);
+            let newUser = userRepository.create({
+              email: String(profile.emails[0].value),
+              password: newpassword,
+            });
+            newUser = await userRepository.save(newUser);
+            done(null, newUser);
           }
-          let newUser = userRepository.create({
-            id: parseInt(profile.id),
-          });
-          newUser = await userRepository.save(newUser);
-          done(null, newUser);
         } catch (e) {
           console.error(e);
           return done(e);
