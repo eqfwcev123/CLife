@@ -8,6 +8,7 @@ import { User } from "../entity/User";
 export default () => {
   console.log("localStrategy Called");
   passport.use(
+    "local",
     new Strategy(
       {
         usernameField: "user_id",
