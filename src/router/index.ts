@@ -74,12 +74,14 @@ router.get(
   isLoggedOut,
   passport.authenticate("facebook", {
     failureRedirect: "/user",
-    //TODOS: 페이스북 로그인 성공시 /main으로 redirect
     successRedirect: "/main",
   })
 );
 
-router.get("/auth/google", passport.authenticate("google"));
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email"] })
+);
 
 router.get(
   "/auth/google/callback",
