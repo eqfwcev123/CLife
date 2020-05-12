@@ -3,6 +3,7 @@ import * as passport from "passport";
 import { User } from "../entity/User";
 import local from "./local";
 import facebook from "./facebook";
+import google from "./google";
 
 export default () => {
   passport.serializeUser((user: User, done) => {
@@ -25,4 +26,5 @@ export default () => {
   });
   local();
   facebook();
+  google();
 };
