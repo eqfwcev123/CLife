@@ -64,11 +64,10 @@ router.post("/signup", isLoggedOut, async (req, res, next) => {
   }
 });
 
-router.get("/auth/facebook", isLoggedOut, (req, res, next) => {
-  passport.authenticate("facebook", {
-    scope: ["public_profile", "email"],
-  });
-});
+router.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 
 router.get(
   "/auth/facebook/callback",
@@ -80,14 +79,23 @@ router.get(
   })
 );
 
+router.get("/auth/google", passport.authenticate("google"));
+
+router.get(
+  "/auth/google/callback",
+  isLoggedOut,
+  passport.authenticate("google", {
+    failureRedirect: "/user",
+    successRedirect: "/main",
+  })
+);
+
 // 모든 사용자 정보 가지고 오기
 router.get("/list", async (req, res, next) => {
   const userRepository = getRepository(User);
   const users = await userRepository.createQueryBuilder("users").getMany();
   return res.json(users);
 });
-
-export default router;
 
 // 특정 사용자 정보 가지고 오기
 router.get("/:id", async (req, res, next) => {
@@ -102,3 +110,5 @@ router.get("/:id", async (req, res, next) => {
   }
   res.json(user);
 });
+
+export default router;
