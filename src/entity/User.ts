@@ -22,6 +22,7 @@ export class User {
     type: "varchar",
     length: 100,
     nullable: false,
+    default: "",
   })
   username: string;
 
@@ -44,6 +45,7 @@ export class User {
     type: "varchar",
     length: 100,
     nullable: false,
+    default: "",
   })
   name: string;
 
