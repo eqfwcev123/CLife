@@ -14,6 +14,8 @@ import "reflect-metadata";
 console.log("라우터 연결전 ");
 import userRouter from "./router/index";
 import { Post } from "./entity/Post";
+import passportConfig from "./passport/index";
+passportConfig();
 
 dotenv.config();
 const app = express();
