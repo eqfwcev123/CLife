@@ -2,7 +2,7 @@ import { getRepository } from "typeorm";
 import * as passport from "passport";
 import { User } from "../entity/User";
 import local from "./local";
-import facebook from "./faceobook";
+import facebook from "./facebook";
 
 export default () => {
   passport.serializeUser((user: User, done) => {
@@ -15,7 +15,7 @@ export default () => {
 
   // deserializeUser의 id 는 serializeUser의 done()함수의 두번째 인자인 user.id 와 동일하다
 
-  passport.deserializeUser(async (id: number, done) => {
+  passport.deserializeUser<User, number>(async (id: number, done) => {
     try {
       const userRepository = getRepository(User);
       const user = await userRepository.findOne({ id: id });
