@@ -16,7 +16,7 @@ import { type } from "os";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     type: "varchar",
@@ -24,14 +24,14 @@ export class User {
     nullable: false,
     default: "",
   })
-  username: string;
+  username!: string;
 
   @Column({
     type: "varchar",
     length: 100,
     nullable: false,
   })
-  password: string;
+  password!: string;
 
   @Column({
     type: "varchar",
@@ -39,7 +39,7 @@ export class User {
     unique: true,
     nullable: false,
   })
-  email: string;
+  email!: string;
 
   @Column({
     type: "varchar",
@@ -47,22 +47,25 @@ export class User {
     nullable: false,
     default: "",
   })
-  name: string;
+  name!: string;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   // One user to Many Post
+  // One user to Many Post
   @OneToMany((type) => Post, (post) => post.user, { nullable: true })
-  posts: Post[];
+  posts!: Post[];
 
   // One user to Many Comment
+  // One user to Many Comment
   @OneToMany((type) => Comment, (comment) => comment.user, { nullable: true })
-  comments: Comment[];
+  comments!: Comment[];
 
+  // Many user to Many user
   // Many user to Many user
   @ManyToMany((type) => User)
   @JoinTable({
@@ -70,5 +73,5 @@ export class User {
     joinColumn: { name: "follower" },
     inverseJoinColumn: { name: "following" },
   })
-  users: User[];
+  users!: User[];
 }
