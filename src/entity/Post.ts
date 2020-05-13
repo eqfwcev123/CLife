@@ -18,42 +18,46 @@ import { Image } from "./Image";
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     type: "varchar",
     length: 100,
     nullable: false,
   })
-  title: string;
+  title!: string;
 
   @Column({
     type: "text",
     nullable: true,
   })
-  content: string;
+  content!: string;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  updatedAt!: Date;
 
+  // Many post To One User
   // Many post To One User
   @ManyToOne((type) => User, (user) => user.posts, {
     nullable: false,
     onDelete: "CASCADE",
   })
-  user: User;
+  user!: User;
 
   // One post To Many Comment
+  // One post To Many Comment
   @OneToMany((type) => Comment, (comment) => comment.content)
-  comment: Comment;
+  comment!: Comment;
 
   // One post To Many Image
+  // One post To Many Image
   @OneToMany((type) => Image, (image) => image.post)
-  image: Image[];
+  image!: Image[];
 
+  // Many post To Many HashTags
   // Many post To Many HashTags
   @ManyToMany((type) => HashTag)
   @JoinTable({
@@ -61,8 +65,9 @@ export class Post {
     joinColumn: { name: "tag" },
     inverseJoinColumn: { name: "tagger" },
   })
-  hashtags: HashTag[];
+  hashtags!: HashTag[];
 
+  // Many post To Many user(like)
   // Many post To Many user(like)
   @ManyToMany((type) => User)
   @JoinTable({
@@ -70,5 +75,5 @@ export class Post {
     joinColumn: { name: "like" },
     inverseJoinColumn: { name: "liker" },
   })
-  post: Post[];
+  post!: Post[];
 }
