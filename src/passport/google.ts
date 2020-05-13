@@ -10,8 +10,8 @@ export default () => {
   passport.use(
     new Strategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        clientID: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         callbackURL: "http://localhost:8000/user/auth/google/callback",
         scope: ["id", "displayName", "email"],
       },
@@ -19,19 +19,18 @@ export default () => {
         try {
           const userRepository = getRepository(GoogleUser);
           const user = await userRepository.findOne({
-            where: { email: profile.emails[0].value },
+            where: { email: profile.emails![0].value },
           });
-          console.log(user);
           if (user) {
-            done(null, user);
+            done(undefined, user);
           } else {
             let newpassword = await bcrypt.hash(profile.id, 12);
             let newUser = userRepository.create({
-              email: String(profile.emails[0].value),
+              email: String(profile.emails![0].value),
               password: newpassword,
             });
             newUser = await userRepository.save(newUser);
-            done(null, newUser);
+            done(undefined, newUser);
           }
         } catch (e) {
           console.error(e);
