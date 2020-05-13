@@ -9,14 +9,14 @@ import { Post } from "./Post";
 @Entity()
 export class HashTag {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @CreateDateColumn()
-  created_date: Date;
+  created_date!: Date;
 
   @Column({
     type: "varchar",
     length: 100,
   })
-  name: string;
+  name!: string;
 }
