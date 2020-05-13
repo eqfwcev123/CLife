@@ -9,10 +9,11 @@ dotenv.config();
 export default () => {
   passport.use(
     "facebook",
+
     new Strategy(
       {
-        clientID: process.env.FACEBOOK_APP_ID,
-        clientSecret: process.env.FACEBOOK_APP_SECRET,
+        clientID: process.env.FACEBOOK_APP_ID!,
+        clientSecret: process.env.FACEBOOK_APP_SECRET!,
         callbackURL: "http://localhost:8000/user/auth/facebook/callback",
         profileFields: ["id", "displayName", "email"],
       },
@@ -20,7 +21,7 @@ export default () => {
         try {
           const userRepository = getRepository(FacebookUser);
           const user = await userRepository.findOne({
-            where: { email: profile.emails[0].value },
+            where: { email: profile.emails![0].value },
           });
           console.log(user);
           // user 가 존재할 경우
@@ -29,7 +30,7 @@ export default () => {
           } else {
             let newpassword = await bcrypt.hash(profile.id, 12);
             let newUser = userRepository.create({
-              email: String(profile.emails[0].value),
+              email: String(profile.emails![0].value),
               password: newpassword,
             });
             newUser = await userRepository.save(newUser);
