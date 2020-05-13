@@ -8,7 +8,8 @@
     "experimentalDecorators": true,
     "outDir": "./build",
     "watch": true,
-    "typeRoots": ["./tyopes", "./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "strict": true
   },
-  "exclude": ["node_modules", "types"]
+  "exclude": ["./types"]
 }
