@@ -11,25 +11,27 @@ import { Post } from "./Post";
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     type: "text",
     nullable: true,
   })
-  content: string;
+  content!: string;
 
   @CreateDateColumn()
-  created_date: Date;
+  created_date!: Date;
 
+  // Many Comment to One User
   // Many Comment to One User
   @ManyToOne((type) => User, (user) => user.comments, {
     nullable: true,
     onDelete: "CASCADE",
   })
-  user: User;
+  user!: User;
 
   // Many Comment to One Post
+  // Many Comment to One Post
   @ManyToOne((type) => Post, (post) => post.id)
-  post: Post;
+  post!: Post;
 }
