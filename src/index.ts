@@ -1,6 +1,7 @@
-import { createConnection, getManager } from "typeorm";
+import { createConnection } from "typeorm";
 import * as express from "express";
 import * as morgan from "morgan";
+import * as path from "path";
 import * as cookieParser from "cookie-parser";
 import * as expressSession from "express-session";
 import * as dotenv from "dotenv";
@@ -12,8 +13,8 @@ import "reflect-metadata";
 
 //Router
 console.log("라우터 연결전 ");
-import userRouter from "./router/index";
-import { Post } from "./entity/Post";
+import userRouter from "./router/user";
+import postRouter from "./router/post";
 import passportConfig from "./passport/index";
 passportConfig();
 
@@ -22,6 +23,7 @@ const app = express();
 const prod = process.env.NODE_ENV === "production";
 app.set("port", prod ? process.env.PORT : 3065);
 app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
 
 createConnection()
   .then(async (connection) => {
@@ -44,7 +46,7 @@ createConnection()
         secret: process.env.COOKIE_SECRET!,
         cookie: {
           httpOnly: true,
-          secure: true,
+          secure: false,
         },
       })
     );
@@ -53,6 +55,7 @@ createConnection()
     app.use(passport.session());
 
     app.use("/user", userRouter);
+    app.use("/post", postRouter);
   })
   .catch((error) => console.log(error));
 
