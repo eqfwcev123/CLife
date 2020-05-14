@@ -1,0 +1,12 @@
+html
+    head
+    body
+        h1 Pleas input your email and password to login
+        form(METHOD="POST" action="/user/login")
+            label Email
+            input(type="text" name="email")
+            br
+            label Password
+            input(type="password" name="password")
+            br
+            button(type="submit" value="submit") Login
