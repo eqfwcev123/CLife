@@ -92,6 +92,13 @@ router.get(
   })
 );
 
+router.get("/logout", (req, res, next) => {
+  req.logout();
+  req.session!.destroy(() => {
+    res.send("you have successfully logged out from CLife");
+  });
+});
+
 // 모든 사용자 정보 가지고 오기
 router.get("/list", async (req, res, next) => {
   const userRepository = getRepository(User);
@@ -101,16 +108,21 @@ router.get("/list", async (req, res, next) => {
 
 // 특정 사용자 정보 가지고 오기
 router.get("/:id", async (req, res, next) => {
-  const userRepository = getRepository(User);
-  const user = await userRepository.findOne({
-    where: {
-      id: req.params.id,
-    },
-  });
-  if (!user) {
-    res.send("해당 사용자는 존재자하지 않습니다");
+  try {
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+    if (!user) {
+      res.send("해당 사용자는 존재자하지 않습니다");
+    }
+    res.json(user);
+  } catch (e) {
+    console.error(e);
+    next();
   }
-  res.json(user);
 });
 
 export default router;
