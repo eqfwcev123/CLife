@@ -40,7 +40,6 @@ export class Post {
   updatedAt!: Date;
 
   // Many post To One User
-  // Many post To One User
   @ManyToOne((type) => User, (user) => user.posts, {
     nullable: false,
     onDelete: "CASCADE",
@@ -48,16 +47,13 @@ export class Post {
   user!: User;
 
   // One post To Many Comment
-  // One post To Many Comment
   @OneToMany((type) => Comment, (comment) => comment.content)
   comment!: Comment;
 
   // One post To Many Image
-  // One post To Many Image
   @OneToMany((type) => Image, (image) => image.post)
   image!: Image[];
 
-  // Many post To Many HashTags
   // Many post To Many HashTags
   @ManyToMany((type) => HashTag)
   @JoinTable({
@@ -67,7 +63,6 @@ export class Post {
   })
   hashtags!: HashTag[];
 
-  // Many post To Many user(like)
   // Many post To Many user(like)
   @ManyToMany((type) => User)
   @JoinTable({
