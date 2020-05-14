@@ -14,14 +14,28 @@ const router = express.Router();
 // const hashtagRepository = getRepository(HashTag);
 
 // User add a post
-router.get("/", isLoggedIn, (req, res, next) => {
+router.get("/", isLoggedIn, async (req, res, next) => {
   try {
-    // const postRepository = getRepository(Post);
-    //   let post = postRepository.create({
-    //     title: req.body.title,
-    //     content: req.body.content,
-    //   });
-    res.send("환영");
+    const postRepository = getRepository(Post);
+    let posts = await postRepository.createQueryBuilder("post").getMany();
+    console.dir(posts);
+    res.render("post", { list: posts });
+  } catch (e) {
+    console.error(e);
+    next();
+  }
+});
+
+router.post("/addPost", isLoggedIn, async (req, res, next) => {
+  try {
+    const postRepository = getRepository(Post);
+    let post = postRepository.create({
+      title: req.body.title,
+      content: req.body.content,
+      user: req.user,
+    });
+    await postRepository.save(post);
+    return res.redirect("/post");
   } catch (e) {
     console.error(e);
     next();
