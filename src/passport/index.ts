@@ -7,6 +7,7 @@ import google from "./google";
 
 export default () => {
   passport.serializeUser((user: User, done) => {
+    console.log("3. SerializeUser 함수 호출");
     done(null, user.id);
   });
 
@@ -16,10 +17,13 @@ export default () => {
 
   // deserializeUser의 id 는 serializeUser의 done()함수의 두번째 인자인 user.id 와 동일하다
 
-  passport.deserializeUser<User, number>(async (id: number, done) => {
+  passport.deserializeUser(async (id: number, done) => {
     try {
+      console.log("4. deserializer 함수 호출");
       const userRepository = getRepository(User);
       const user = await userRepository.findOne({ id: id });
+      console.log(user);
+      done(null, user);
     } catch (e) {
       console.error(e);
     }
