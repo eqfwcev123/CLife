@@ -6,11 +6,17 @@ import * as passport from "passport";
 import { User } from "../entity/User";
 const router = express.Router();
 
+router.get("", (req, res, next) => {
+  return res.render("index");
+});
+
 router.post("/login", isLoggedOut, (req, res, next) => {
+  console.log("1. router.post 에서 사용자 인증함수 호출");
   passport.authenticate(
     "local",
     (err: Error, user: User, info: { message: string }) => {
-      console.log(req.user);
+      console.log("err 는", err);
+      console.log("info 는", info);
       if (err) {
         console.error(err);
         return next(err);
@@ -18,16 +24,12 @@ router.post("/login", isLoggedOut, (req, res, next) => {
       if (info) {
         return res.status(401).send(info.message);
       }
-      return req.login(user, async (loginError: Error) => {
+      return req.login(user, (loginError: Error) => {
         try {
           if (loginError) {
             return next(loginError);
           }
-          const userRepository = getRepository(User);
-          const fullUser = await userRepository.find({
-            where: { id: user.id },
-          });
-          return res.json(fullUser);
+          return res.redirect("/post");
         } catch (e) {
           console.error(e);
           return next(e);
