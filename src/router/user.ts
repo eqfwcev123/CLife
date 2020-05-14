@@ -15,8 +15,6 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   passport.authenticate(
     "local",
     (err: Error, user: User, info: { message: string }) => {
-      console.log("err 는", err);
-      console.log("info 는", info);
       if (err) {
         console.error(err);
         return next(err);
