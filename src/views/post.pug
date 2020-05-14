@@ -2,3 +2,13 @@ html
     head
     body
         h1 Welcome to post page
+        form(method="POST" action="/post/addPost")
+            label 제목
+            input(type="text" name="title")
+            br
+            label 내용
+            input(type="text" name="content")
+            button(type="submit") 글작성
+        ul
+            each val in list
+                li= `제목:${val.title} 내용:${val.content}`
