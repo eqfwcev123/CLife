@@ -13,12 +13,10 @@ const router = express.Router();
 // const imageRepository = getRepository(Image);
 // const hashtagRepository = getRepository(HashTag);
 
-// User add a post
 router.get("/", isLoggedIn, async (req, res, next) => {
   try {
     const postRepository = getRepository(Post);
     let posts = await postRepository.createQueryBuilder("post").getMany();
-    console.dir(posts);
     res.render("post", { list: posts });
   } catch (e) {
     console.error(e);
@@ -26,6 +24,7 @@ router.get("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// ADD POST
 router.post("/addPost", isLoggedIn, async (req, res, next) => {
   try {
     const postRepository = getRepository(Post);
@@ -40,6 +39,32 @@ router.post("/addPost", isLoggedIn, async (req, res, next) => {
     console.error(e);
     next();
   }
+});
+
+// GET POST
+router.get("/getPost", isLoggedIn, async (req, res, next) => {
+  const postRepository = getRepository(Post);
+  let post = await postRepository.findOne({
+    where: {
+      id: req.user!.id,
+    },
+  });
+  return res.render("postupdate");
+});
+
+// UPDATE POST
+router.patch("/updatePost", isLoggedIn, async (req, res, next) => {
+  const postRepository = getRepository(Post);
+  console.dir(req);
+  let updatePost = await postRepository.update(
+    {
+      id: req.user!.id,
+    },
+    {
+      title: req.body.title,
+      content: req.body.content,
+    }
+  );
 });
 
 export default router;
