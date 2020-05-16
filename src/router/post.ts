@@ -41,15 +41,15 @@ router.post("/addPost", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// GET POST
-router.get("/getPost", isLoggedIn, async (req, res, next) => {
+// 특정 포스트 가지고오기
+router.get("/:id/getPost", isLoggedIn, async (req, res, next) => {
   const postRepository = getRepository(Post);
   let post = await postRepository.findOne({
     where: {
-      id: req.user!.id,
+      id: req.params.id,
     },
   });
-  return res.render("postupdate");
+  return res.render("postupdate", { post: post });
 });
 
 // UPDATE POST
