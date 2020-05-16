@@ -9,6 +9,9 @@ html
             label 내용
             input(type="text" name="content")
             button(type="submit") 글작성
-        ul
-            each val in list
-                li= `제목:${val.title} 내용:${val.content}`
+
+        each val in list
+            div
+                p= `제목:${val.title}`
+                p= `내용:${val.content}`
+                a(href=`/post/${val.id}/getPost`) 이동 
