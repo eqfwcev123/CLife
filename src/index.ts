@@ -10,9 +10,9 @@ import * as helmet from "helmet";
 import * as passport from "passport";
 import * as cors from "cors";
 import "reflect-metadata";
+import logger from "./logger";
 
 //Router
-console.log("라우터 연결전 ");
 import userRouter from "./router/user";
 import postRouter from "./router/post";
 import passportConfig from "./passport/index";
@@ -31,6 +31,12 @@ createConnection()
       app.use(hpp());
       app.use(helmet());
       app.use(morgan("combined"));
+      app.use((req, res, next) => {
+        const err = new Error("Not Found");
+        logger.info("hello");
+        logger.error(err.message);
+        next(err);
+      });
     } else {
       app.use(morgan("dev"));
     }
