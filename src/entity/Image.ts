@@ -8,12 +8,11 @@ export class Image {
 
   @Column({
     type: "varchar",
-    length: 50,
+    length: 250,
   })
   src!: string;
 
   // Many image To One post
-  // Many image To One post
-  @ManyToOne((type) => Post, (post) => post.image)
+  @ManyToOne((type) => Post, (post) => post.images)
   post!: Post;
 }
