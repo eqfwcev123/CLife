@@ -18,5 +18,5 @@ export class HashTag {
     type: "varchar",
     length: 100,
   })
-  name!: string;
+  title!: string;
 }
