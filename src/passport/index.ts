@@ -22,7 +22,6 @@ export default () => {
       console.log("4. deserializer 함수 호출");
       const userRepository = getRepository(User);
       const user = await userRepository.findOne({ id: id });
-      console.log(user);
       done(null, user);
     } catch (e) {
       console.error(e);
