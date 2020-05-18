@@ -52,14 +52,14 @@ export class Post {
 
   // One post To Many Image
   @OneToMany((type) => Image, (image) => image.post)
-  image!: Image[];
+  images!: Image[];
 
   // Many post To Many HashTags
   @ManyToMany((type) => HashTag)
   @JoinTable({
     name: "post_hashtag_hashtagger",
-    joinColumn: { name: "tag" },
-    inverseJoinColumn: { name: "tagger" },
+    joinColumn: { name: "postid" },
+    inverseJoinColumn: { name: "tagid" },
   })
   hashtags!: HashTag[];
 
