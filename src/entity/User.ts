@@ -56,16 +56,19 @@ export class User {
   updatedAt!: Date;
 
   // One user to Many Post
-  // One user to Many Post
-  @OneToMany((type) => Post, (post) => post.user, { nullable: true })
+  @OneToMany((type) => Post, (post) => post.user, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
   posts!: Post[];
 
   // One user to Many Comment
-  // One user to Many Comment
-  @OneToMany((type) => Comment, (comment) => comment.user, { nullable: true })
+  @OneToMany((type) => Comment, (comment) => comment.user, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
   comments!: Comment[];
 
-  // Many user to Many user
   // Many user to Many user
   @ManyToMany((type) => User)
   @JoinTable({
