@@ -4,6 +4,7 @@ import * as express from "express";
 import * as bcrypt from "bcrypt";
 import * as passport from "passport";
 import { User } from "../entity/User";
+import { Post } from "../entity/Post";
 const router = express.Router();
 
 router.get("", (req, res, next) => {
@@ -22,12 +23,22 @@ router.post("/login", isLoggedOut, (req, res, next) => {
       if (info) {
         return res.status(401).send(info.message);
       }
-      return req.login(user, (loginError: Error) => {
+      return req.login(user, async (loginError: Error) => {
         try {
           if (loginError) {
             return next(loginError);
           }
-          return res.redirect("/post");
+          const userRepository = getRepository(User);
+          const user = await userRepository.findOne({
+            where: {
+              id: req.user!.id,
+            },
+          });
+          // const postRepository = getRepository(Post);
+          // const posts = await postRepository
+          //   .createQueryBuilder("post")
+          //   .getMany();
+          return res.json(user);
         } catch (e) {
           console.error(e);
           return next(e);
@@ -123,6 +134,17 @@ router.get("/:id", async (req, res, next) => {
     console.error(e);
     next();
   }
+});
+
+// 특정 사용자가 작성한 포스트 가지고오기
+router.get("/getUserPost", isLoggedIn, async (req, res, next) => {
+  const postRepository = getRepository(Post);
+  let posts = await postRepository
+    .createQueryBuilder("p")
+    .leftJoinAndSelect("p.user", "posts")
+    .where("p.userId = :id", { id: req.user!.id })
+    .getMany();
+  return res.json(posts);
 });
 
 export default router;
