@@ -49,22 +49,27 @@ router.get("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/:id/img", isLoggedIn, upload.single("img"), async (req, res) => {
-  console.log(req.file);
-  const imageRepository = getRepository(Image);
-  const postRepository = getRepository(Post);
-  let post = await postRepository.findOne({
-    where: {
-      id: parseInt(req.params.id),
-    },
-  });
-  let image = imageRepository.create({
-    src: req.file.path,
-    post: post,
-  });
-  await imageRepository.save(image);
-  return res.json(image);
-});
+router.post(
+  "/:id/img",
+  isLoggedIn,
+  upload.array("img", 5),
+  async (req, res) => {
+    console.log(req.files);
+    const imageRepository = getRepository(Image);
+    const postRepository = getRepository(Post);
+    let post = await postRepository.findOne({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+    let image = imageRepository.create({
+      src: req.file.path,
+      post: post,
+    });
+    await imageRepository.save(image);
+    return res.json(image);
+  }
+);
 
 // ADD POST
 const upload2 = multer();

@@ -11,7 +11,6 @@ import {
 } from "typeorm";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
-import { type } from "os";
 
 @Entity()
 export class User {
