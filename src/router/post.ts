@@ -49,12 +49,12 @@ router.get("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
+//보류
 router.post(
   "/:id/img",
   isLoggedIn,
   upload.array("img", 5),
   async (req, res) => {
-    console.log(req.files);
     const imageRepository = getRepository(Image);
     const postRepository = getRepository(Post);
     let post = await postRepository.findOne({
@@ -152,7 +152,7 @@ router.post("/:id/like", isLoggedIn, async (req, res, next) => {
       .createQueryBuilder("post")
       .relation(Post, "post")
       .of(parseInt(req.params.id))
-      .add(req.user!.id);
+      .add((req.user! as User).id);
     res.json("좋아요!");
   } catch (e) {
     console.error(e);
@@ -168,7 +168,7 @@ router.delete("/:id/unlike", isLoggedIn, async (req, res, next) => {
       .createQueryBuilder("post")
       .relation(Post, "post")
       .of(parseInt(req.params.id))
-      .remove(req.user!.id);
+      .remove((req.user as User).id);
     return res.json("싫어요!");
   } catch (e) {
     console.error(e);
