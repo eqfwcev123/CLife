@@ -168,6 +168,28 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 팔로우 취소
+router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
+  try {
+    const userRepository = getRepository(User);
+    let me = await userRepository.findOne({
+      where: {
+        id: (req.user as User).id,
+      },
+    });
+    await userRepository
+      .createQueryBuilder()
+      .relation(User, "users")
+      .of(me!.id)
+      .remove(req.params.id);
+    return res.json("팔로우 취소");
+  } catch (e) {
+    console.error(e);
+    next();
+  }
+});
+
+// 팔로우
 router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
   try {
     const userRepository = getRepository(User);
@@ -176,7 +198,13 @@ router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
         id: (req.user as User).id,
       },
     });
-    await userRepository.createQueryBuilder();
+    // relation 에서 두번째 인자인 users 는 컬럼명이다
+    await userRepository
+      .createQueryBuilder("follow")
+      .relation(User, "users")
+      .of(me!.id)
+      .add(req.params.id);
+    return res.json("팔로우 성공");
   } catch (e) {
     console.error(e);
     next();
