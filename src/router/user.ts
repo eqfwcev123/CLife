@@ -31,7 +31,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           const userRepository = getRepository(User);
           const user = await userRepository.findOne({
             where: {
-              id: req.user!.id,
+              id: (req.user as User)!.id,
             },
           });
           // const postRepository = getRepository(Post);
@@ -142,9 +142,45 @@ router.get("/getUserPost", isLoggedIn, async (req, res, next) => {
   let posts = await postRepository
     .createQueryBuilder("p")
     .leftJoinAndSelect("p.user", "posts")
-    .where("p.userId = :id", { id: req.user!.id })
+    .where("p.userId = :id", { id: (req.user as User).id })
     .getMany();
   return res.json(posts);
+});
+
+// Change username
+router.patch("/nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    const userRepository = getRepository(User);
+    let user = await userRepository
+      .createQueryBuilder("user")
+      .update(User)
+      .set({
+        username: req.body.username,
+      })
+      .where({
+        id: (req.user as User)!.id,
+      })
+      .execute();
+    return res.json(user);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
+  try {
+    const userRepository = getRepository(User);
+    let me = await userRepository.findOne({
+      where: {
+        id: (req.user as User).id,
+      },
+    });
+    await userRepository.createQueryBuilder();
+  } catch (e) {
+    console.error(e);
+    next();
+  }
 });
 
 export default router;
