@@ -15,6 +15,7 @@ import logger from "./logger";
 //Router
 import userRouter from "./router/user";
 import postRouter from "./router/post";
+import hashTagRouter from "./router/hashtag";
 import passportConfig from "./passport/index";
 passportConfig();
 
@@ -62,6 +63,7 @@ createConnection()
 
     app.use("/user", userRouter);
     app.use("/post", postRouter);
+    app.use("/hashtag", hashTagRouter);
   })
   .catch((error) => console.log(error));
 
