@@ -168,8 +168,47 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 사용자가 팔로잉 하는 다른 사용자들 목록
+router.get("/followings", isLoggedIn, async (req, res, next) => {
+  try {
+    const userRepository = getRepository(User);
+    const me = await userRepository.findOne({
+      where: {
+        id: (req.user as User).id,
+      },
+    });
+    if (!me) return res.status(404).send("no user");
+    let followings = await userRepository
+      .createQueryBuilder()
+      .relation(User, "followers")
+      .of(me!.id)
+      .loadMany();
+    return res.json(followings);
+  } catch (e) {
+    console.error(e);
+    next();
+  }
+});
+
+// get followers -- 나를 팔로우하는 사람 리스트
+router.get("/followers", isLoggedIn, async (req, res, next) => {
+  try {
+    const userRepository = getRepository(User);
+    const me = await userRepository.findOne({
+      where: {
+        id: (req.user as User).id,
+      },
+    });
+    if (!me) return res.status(404).send("no user");
+    // let followers = userRepository.createQueryBuilder().relation();
+  } catch (e) {
+    console.error(e);
+    next();
+  }
+});
+
 // 팔로우 취소
-router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
+router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
   try {
     const userRepository = getRepository(User);
     let me = await userRepository.findOne({
@@ -177,9 +216,10 @@ router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
         id: (req.user as User).id,
       },
     });
+    if (!me) return res.status(404).send("no user");
     await userRepository
       .createQueryBuilder()
-      .relation(User, "users")
+      .relation(User, "followers")
       .of(me!.id)
       .remove(req.params.id);
     return res.json("팔로우 취소");
@@ -198,10 +238,12 @@ router.post("/:id/follow", isLoggedIn, async (req, res, next) => {
         id: (req.user as User).id,
       },
     });
+    if (!me) return res.status(404).send("no user");
     // relation 에서 두번째 인자인 users 는 컬럼명이다
+    // relation 은 of 가 누구인지를 의미한다
     await userRepository
       .createQueryBuilder("follow")
-      .relation(User, "users")
+      .relation(User, "followers")
       .of(me!.id)
       .add(req.params.id);
     return res.json("팔로우 성공");
