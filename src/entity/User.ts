@@ -69,11 +69,22 @@ export class User {
   comments!: Comment[];
 
   // Many user to Many user
-  @ManyToMany((type) => User)
+  // @ManyToMany((type) => User)
+  // @JoinTable({
+  //   name: "user_follower_following",
+  //   joinColumn: { name: "follower" },
+  //   inverseJoinColumn: { name: "following" },
+  // })
+  // users!: User[];
+
+  @ManyToMany((type) => User, (user) => user.following)
   @JoinTable({
     name: "user_follower_following",
     joinColumn: { name: "follower" },
     inverseJoinColumn: { name: "following" },
   })
-  users!: User[];
+  followers!: User[];
+
+  @ManyToMany((type) => User, (user) => user.followers)
+  following!: User[];
 }
