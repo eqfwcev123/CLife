@@ -200,7 +200,7 @@ router.get("/followers", isLoggedIn, async (req, res, next) => {
       },
     });
     if (!me) return res.status(404).send("no user");
-    // let followers = userRepository.createQueryBuilder().relation();
+    // let followers = userRepository.createQueryBuilder().relation(User, "following").of();
   } catch (e) {
     console.error(e);
     next();
